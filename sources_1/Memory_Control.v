@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-module Memory_Control #(DATA_WIDTH = 32,
+module Memory_Control #(parameter DATA_WIDTH = 32,
                         ADDRESS_BUS  = 22,
                         ADDRESS_BITS = 15,
                         ENABLE_BITS  = 7,

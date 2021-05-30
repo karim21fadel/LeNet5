@@ -77,7 +77,7 @@ module top_module_tb #(parameter DATA_WIDTH      = 32,
 	always #5 clk = ~clk;
 
     integer i,j;
-    localparam output_file = "files/outputs/hard/dec/output_file_dec.txt";
+    localparam output_file = "/home/maali/ai_accelerator_block/LeNet5/files/outputs/hard/dec/output_file_dec.txt";
     integer output_file_id;
     
     
@@ -88,26 +88,26 @@ module top_module_tb #(parameter DATA_WIDTH      = 32,
 	if(~output_file_id)
 	       $display("failed1");
 
-	$readmemb("files/inputs/image_float.txt",input_image);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/inputs/image_float.txt",input_image);
 	           
-	$readmemb("files/weights/memory_float/layer_0_mem.txt",convA1_WM1);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_0_mem.txt",convA1_WM1);
 	           
-	$readmemb("files/weights/memory_float/layer_3_mem_0.txt",convB_WM1);
-	$readmemb("files/weights/memory_float/layer_3_mem_1.txt",convB_WM2);
-	$readmemb("files/weights/memory_float/layer_3_mem_2.txt",convB_WM3);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_0.txt",convB_WM1);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_1.txt",convB_WM2);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_2.txt",convB_WM3);
 	           
-	$readmemb("files/weights/memory_float/layer_6_mem_0.txt",convA2_WM1);
-	$readmemb("files/weights/memory_float/layer_6_mem_1.txt",convA2_WM2);
-	$readmemb("files/weights/memory_float/layer_6_mem_2.txt",convA2_WM3);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_0.txt",convA2_WM1);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_1.txt",convA2_WM2);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_2.txt",convA2_WM3);
                
-	$readmemb("files/weights/memory_float/layer_10_mem.txt",FC1_WM);
-	$readmemb("files/weights/memory_float/layer_12_mem.txt",FC2_WM);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_10_mem.txt",FC1_WM);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_12_mem.txt",FC2_WM);
                
-	$readmemb("files/weights/memory_float/layer_0_mem_bias.txt",convA1_BM);
-	$readmemb("files/weights/memory_float/layer_3_mem_bias.txt",convB_BM);
-	$readmemb("files/weights/memory_float/layer_6_mem_bias.txt",convA2_BM);
-	$readmemb("files/weights/memory_float/layer_10_mem_bias.txt",FC1_BM);
-	$readmemb("files/weights/memory_float/layer_12_mem_bias.txt",FC2_BM);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_0_mem_bias.txt",convA1_BM);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_bias.txt",convB_BM);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_bias.txt",convA2_BM);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_10_mem_bias.txt",FC1_BM);
+	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_12_mem_bias.txt",FC2_BM);
 	
 	
 	// Initialize Inputs

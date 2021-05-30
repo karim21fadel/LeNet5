@@ -7,6 +7,6 @@ module Relu #(parameter Data_Width = 32)
     output [Data_Width-1:0] out
     );
    
-   assign out = ( (in[Data_Width-1]) & relu_enable ) ?  8'h00000000 : in ;
+   assign out = ( (in[Data_Width-1]) & relu_enable ) ?  32'h00000000 : in ;
     //assign out = in;
 endmodule 
