@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module ConvB_unit #(parameter DATA_WIDTH        = 32,
+module ConvB_unit #(parameter ARITH_TYPE = 1, DATA_WIDTH        = 32,
                              ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 32,                                                
@@ -95,7 +95,7 @@ module ConvB_unit #(parameter DATA_WIDTH        = 32,
 	wire [DATA_WIDTH-1:0] accu_data_out;
 	wire [DATA_WIDTH-1:0] relu_data_out;
 	
-	SinglePort_Memory #(.MEM_SIZE (KERNAL_SIZE * KERNAL_SIZE * IFM_DEPTH * (NUMBER_OF_FILTERS/NUMBER_OF_UNITS+1)) ) 
+	SinglePort_Memory #(.DATA_WIDTH(DATA_WIDTH), .MEM_SIZE (KERNAL_SIZE * KERNAL_SIZE * IFM_DEPTH * (NUMBER_OF_FILTERS/NUMBER_OF_UNITS+1)) ) 
 	WM 
 	(
 	 .clk(clk),	
@@ -107,7 +107,7 @@ module ConvB_unit #(parameter DATA_WIDTH        = 32,
 	 );
 	 
 	 FIFO_25outputs_WM #(.DATA_WIDTH(DATA_WIDTH), .KERNAL_SIZE(KERNAL_SIZE))
-	WM_FIFO (
+	 WM_FIFO (
 	 .clk(clk),
 	 .reset(reset),
 	 .fifo_enable(wm_fifo_enable),
@@ -139,7 +139,7 @@ module ConvB_unit #(parameter DATA_WIDTH        = 32,
 	 .fifo_data_out_25(signal_w25)
 	);
 	 
-	Convolution_B #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+	Convolution_B #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
 	convA1 
 	(
 	 .clk(clk),
@@ -173,7 +173,7 @@ module ConvB_unit #(parameter DATA_WIDTH        = 32,
 	 .conv_data_out(conv_data_out)
 	);
 	
-	Accumulator_B #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+	Accumulator_B #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     accu_B
     (
      .clk(clk),
@@ -184,7 +184,7 @@ module ConvB_unit #(parameter DATA_WIDTH        = 32,
      .accu_data_out(accu_data_out)
      );
 	
-	Relu  Active1 (.in(accu_data_out), .out(relu_data_out), .relu_enable(relu_enable));
+	Relu #(.DATA_WIDTH(DATA_WIDTH))   Active1 (.in(accu_data_out), .out(relu_data_out), .relu_enable(relu_enable));
 	
     assign unit_data_out = relu_data_out;
     

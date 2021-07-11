@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module TOP_ConvA1 #(parameter DATA_WIDTH          = 32,
+module TOP_ConvA1 #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                               ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 32,                                                
@@ -83,7 +83,7 @@ module TOP_ConvA1 #(parameter DATA_WIDTH          = 32,
     );    
      
 
-    ConvA1_DP #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS), .NUMBER_OF_UNITS(NUMBER_OF_UNITS))
+    ConvA1_DP #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS), .NUMBER_OF_UNITS(NUMBER_OF_UNITS))
     DP_A1
     (
     .clk(clk),

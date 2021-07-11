@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module  Pool1_DP #(parameter DATA_WIDTH            = 32,
+module  Pool1_DP #(parameter ARITH_TYPE = 1, DATA_WIDTH            = 32,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 14,                                                
                              IFM_DEPTH             = 3,
@@ -44,7 +44,7 @@ module  Pool1_DP #(parameter DATA_WIDTH            = 32,
 	 .fifo_data_out_4(signal_if4) 
 	);
 
-	Average_Pooling #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE))
+	Average_Pooling #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE))
 	pool_1 (
 	.clk(clk),
     .reset(reset),

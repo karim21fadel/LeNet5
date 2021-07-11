@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Convolution_B #(parameter DATA_WIDTH          = 32,
+module Convolution_B #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                              ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 14,                                                
@@ -244,64 +244,64 @@ module Convolution_B #(parameter DATA_WIDTH          = 32,
         end
     end
     
-    FP_Multiplier mul_1 (.FP_in1 (w1), .FP_in2 (if1), .FP_out (mul_out_1));
-    FP_Multiplier mul_2 (.FP_in1 (w2), .FP_in2 (if2), .FP_out (mul_out_2));
-    FP_Multiplier mul_3 (.FP_in1 (w3), .FP_in2 (if3), .FP_out (mul_out_3));
-    FP_Multiplier mul_4 (.FP_in1 (w4), .FP_in2 (if4), .FP_out (mul_out_4));
-    FP_Multiplier mul_5 (.FP_in1 (w5), .FP_in2 (if5), .FP_out (mul_out_5));
-    FP_Multiplier mul_6 (.FP_in1 (w6), .FP_in2 (if6), .FP_out (mul_out_6));
-    FP_Multiplier mul_7 (.FP_in1 (w7), .FP_in2 (if7), .FP_out (mul_out_7));
-    FP_Multiplier mul_8 (.FP_in1 (w8), .FP_in2 (if8), .FP_out (mul_out_8));
-    FP_Multiplier mul_9 (.FP_in1 (w9), .FP_in2 (if9), .FP_out (mul_out_9));
-    FP_Multiplier mul_10 (.FP_in1 (w10), .FP_in2 (if10), .FP_out (mul_out_10));
-    FP_Multiplier mul_11 (.FP_in1 (w11), .FP_in2 (if11), .FP_out (mul_out_11));
-    FP_Multiplier mul_12 (.FP_in1 (w12), .FP_in2 (if12), .FP_out (mul_out_12));
-    FP_Multiplier mul_13 (.FP_in1 (w13), .FP_in2 (if13), .FP_out (mul_out_13));
-    FP_Multiplier mul_14 (.FP_in1 (w14), .FP_in2 (if14), .FP_out (mul_out_14));
-    FP_Multiplier mul_15 (.FP_in1 (w15), .FP_in2 (if15), .FP_out (mul_out_15));
-    FP_Multiplier mul_16 (.FP_in1 (w16), .FP_in2 (if16), .FP_out (mul_out_16));
-    FP_Multiplier mul_17 (.FP_in1 (w17), .FP_in2 (if17), .FP_out (mul_out_17));
-    FP_Multiplier mul_18 (.FP_in1 (w18), .FP_in2 (if18), .FP_out (mul_out_18));
-    FP_Multiplier mul_19 (.FP_in1 (w19), .FP_in2 (if19), .FP_out (mul_out_19));
-    FP_Multiplier mul_20 (.FP_in1 (w20), .FP_in2 (if20), .FP_out (mul_out_20));
-    FP_Multiplier mul_21 (.FP_in1 (w21), .FP_in2 (if21), .FP_out (mul_out_21));
-    FP_Multiplier mul_22 (.FP_in1 (w22), .FP_in2 (if22), .FP_out (mul_out_22));
-    FP_Multiplier mul_23 (.FP_in1 (w23), .FP_in2 (if23), .FP_out (mul_out_23));
-    FP_Multiplier mul_24 (.FP_in1 (w24), .FP_in2 (if24), .FP_out (mul_out_24));
-    FP_Multiplier mul_25 (.FP_in1 (w25), .FP_in2 (if25), .FP_out (mul_out_25));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_1 (.FP_in1 (w1), .FP_in2 (if1), .FP_out (mul_out_1));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_2 (.FP_in1 (w2), .FP_in2 (if2), .FP_out (mul_out_2));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_3 (.FP_in1 (w3), .FP_in2 (if3), .FP_out (mul_out_3));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_4 (.FP_in1 (w4), .FP_in2 (if4), .FP_out (mul_out_4));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_5 (.FP_in1 (w5), .FP_in2 (if5), .FP_out (mul_out_5));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_6 (.FP_in1 (w6), .FP_in2 (if6), .FP_out (mul_out_6));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_7 (.FP_in1 (w7), .FP_in2 (if7), .FP_out (mul_out_7));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_8 (.FP_in1 (w8), .FP_in2 (if8), .FP_out (mul_out_8));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_9 (.FP_in1 (w9), .FP_in2 (if9), .FP_out (mul_out_9));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_10 (.FP_in1 (w10), .FP_in2 (if10), .FP_out (mul_out_10));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_11 (.FP_in1 (w11), .FP_in2 (if11), .FP_out (mul_out_11));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_12 (.FP_in1 (w12), .FP_in2 (if12), .FP_out (mul_out_12));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_13 (.FP_in1 (w13), .FP_in2 (if13), .FP_out (mul_out_13));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_14 (.FP_in1 (w14), .FP_in2 (if14), .FP_out (mul_out_14));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_15 (.FP_in1 (w15), .FP_in2 (if15), .FP_out (mul_out_15));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_16 (.FP_in1 (w16), .FP_in2 (if16), .FP_out (mul_out_16));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_17 (.FP_in1 (w17), .FP_in2 (if17), .FP_out (mul_out_17));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_18 (.FP_in1 (w18), .FP_in2 (if18), .FP_out (mul_out_18));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_19 (.FP_in1 (w19), .FP_in2 (if19), .FP_out (mul_out_19));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_20 (.FP_in1 (w20), .FP_in2 (if20), .FP_out (mul_out_20));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_21 (.FP_in1 (w21), .FP_in2 (if21), .FP_out (mul_out_21));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_22 (.FP_in1 (w22), .FP_in2 (if22), .FP_out (mul_out_22));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_23 (.FP_in1 (w23), .FP_in2 (if23), .FP_out (mul_out_23));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_24 (.FP_in1 (w24), .FP_in2 (if24), .FP_out (mul_out_24));
+    Multiplier #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) mul_25 (.FP_in1 (w25), .FP_in2 (if25), .FP_out (mul_out_25));
     
-    FP_Adder adr_12_1 (.FP_in1 (reg_mul_out_1), .FP_in2 (reg_mul_out_2), .FP_out (adder_out_12_1));
-    FP_Adder adr_12_2 (.FP_in1 (reg_mul_out_3), .FP_in2 (reg_mul_out_4), .FP_out (adder_out_12_2));
-    FP_Adder adr_12_3 (.FP_in1 (reg_mul_out_5), .FP_in2 (reg_mul_out_6), .FP_out (adder_out_12_3));
-    FP_Adder adr_12_4 (.FP_in1 (reg_mul_out_7), .FP_in2 (reg_mul_out_8), .FP_out (adder_out_12_4));
-    FP_Adder adr_12_5 (.FP_in1 (reg_mul_out_9), .FP_in2 (reg_mul_out_10), .FP_out (adder_out_12_5));
-    FP_Adder adr_12_6 (.FP_in1 (reg_mul_out_11), .FP_in2 (reg_mul_out_12), .FP_out (adder_out_12_6));
-    FP_Adder adr_12_7 (.FP_in1 (reg_mul_out_13), .FP_in2 (reg_mul_out_14), .FP_out (adder_out_12_7));
-    FP_Adder adr_12_8 (.FP_in1 (reg_mul_out_15), .FP_in2 (reg_mul_out_16), .FP_out (adder_out_12_8));
-    FP_Adder adr_12_9 (.FP_in1 (reg_mul_out_17), .FP_in2 (reg_mul_out_18), .FP_out (adder_out_12_9));
-    FP_Adder adr_12_10 (.FP_in1 (reg_mul_out_19), .FP_in2 (reg_mul_out_20), .FP_out (adder_out_12_10));
-    FP_Adder adr_12_11 (.FP_in1 (reg_mul_out_21), .FP_in2 (reg_mul_out_22), .FP_out (adder_out_12_11));
-    FP_Adder adr_12_12 (.FP_in1 (reg_mul_out_23), .FP_in2 (reg_mul_out_24), .FP_out (adder_out_12_12));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_1 (.FP_in1 (reg_mul_out_1), .FP_in2 (reg_mul_out_2), .FP_out (adder_out_12_1));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_2 (.FP_in1 (reg_mul_out_3), .FP_in2 (reg_mul_out_4), .FP_out (adder_out_12_2));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_3 (.FP_in1 (reg_mul_out_5), .FP_in2 (reg_mul_out_6), .FP_out (adder_out_12_3));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_4 (.FP_in1 (reg_mul_out_7), .FP_in2 (reg_mul_out_8), .FP_out (adder_out_12_4));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_5 (.FP_in1 (reg_mul_out_9), .FP_in2 (reg_mul_out_10), .FP_out (adder_out_12_5));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_6 (.FP_in1 (reg_mul_out_11), .FP_in2 (reg_mul_out_12), .FP_out (adder_out_12_6));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_7 (.FP_in1 (reg_mul_out_13), .FP_in2 (reg_mul_out_14), .FP_out (adder_out_12_7));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_8 (.FP_in1 (reg_mul_out_15), .FP_in2 (reg_mul_out_16), .FP_out (adder_out_12_8));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_9 (.FP_in1 (reg_mul_out_17), .FP_in2 (reg_mul_out_18), .FP_out (adder_out_12_9));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_10 (.FP_in1 (reg_mul_out_19), .FP_in2 (reg_mul_out_20), .FP_out (adder_out_12_10));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_11 (.FP_in1 (reg_mul_out_21), .FP_in2 (reg_mul_out_22), .FP_out (adder_out_12_11));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_12_12 (.FP_in1 (reg_mul_out_23), .FP_in2 (reg_mul_out_24), .FP_out (adder_out_12_12));
     
     //assign adder_out_12_9 = reg_mul_out_25;
     
-    FP_Adder adr_6_1 (.FP_in1 (reg_adder_out_12_1), .FP_in2 (reg_adder_out_12_2), .FP_out (adder_out_3_1));
-    FP_Adder adr_6_2 (.FP_in1 (reg_adder_out_12_3), .FP_in2 (reg_adder_out_12_4), .FP_out (adder_out_3_2));
-    FP_Adder adr_6_3 (.FP_in1 (reg_adder_out_12_5), .FP_in2 (reg_adder_out_12_6), .FP_out (adder_out_3_3));
-    FP_Adder adr_6_4 (.FP_in1 (reg_adder_out_12_7), .FP_in2 (reg_adder_out_12_8), .FP_out (adder_out_3_4));
-    FP_Adder adr_6_5 (.FP_in1 (reg_adder_out_12_9), .FP_in2 (reg_adder_out_12_10), .FP_out (adder_out_3_5));
-    FP_Adder adr_6_6 (.FP_in1 (reg_adder_out_12_11), .FP_in2 (reg_adder_out_12_12), .FP_out (adder_out_3_6));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_6_1 (.FP_in1 (reg_adder_out_12_1), .FP_in2 (reg_adder_out_12_2), .FP_out (adder_out_3_1));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_6_2 (.FP_in1 (reg_adder_out_12_3), .FP_in2 (reg_adder_out_12_4), .FP_out (adder_out_3_2));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_6_3 (.FP_in1 (reg_adder_out_12_5), .FP_in2 (reg_adder_out_12_6), .FP_out (adder_out_3_3));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_6_4 (.FP_in1 (reg_adder_out_12_7), .FP_in2 (reg_adder_out_12_8), .FP_out (adder_out_3_4));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_6_5 (.FP_in1 (reg_adder_out_12_9), .FP_in2 (reg_adder_out_12_10), .FP_out (adder_out_3_5));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_6_6 (.FP_in1 (reg_adder_out_12_11), .FP_in2 (reg_adder_out_12_12), .FP_out (adder_out_3_6));
     
-    FP_Adder adr_3_1 (.FP_in1 (reg_adder_out_3_1), .FP_in2 (reg_adder_out_3_2), .FP_out (adder_out_4_1));
-    FP_Adder adr_3_2 (.FP_in1 (reg_adder_out_3_3), .FP_in2 (reg_adder_out_3_4), .FP_out (adder_out_4_2));
-    FP_Adder adr_3_3 (.FP_in1 (reg_adder_out_3_5), .FP_in2 (reg_adder_out_3_6), .FP_out (adder_out_4_3));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_3_1 (.FP_in1 (reg_adder_out_3_1), .FP_in2 (reg_adder_out_3_2), .FP_out (adder_out_4_1));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_3_2 (.FP_in1 (reg_adder_out_3_3), .FP_in2 (reg_adder_out_3_4), .FP_out (adder_out_4_2));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_3_3 (.FP_in1 (reg_adder_out_3_5), .FP_in2 (reg_adder_out_3_6), .FP_out (adder_out_4_3));
     
-    FP_Adder adr_2_1 (.FP_in1 (reg_adder_out_4_1), .FP_in2 (reg_adder_out_4_2), .FP_out (adder_out_5_1));
-    FP_Adder adr_2_2 (.FP_in1 (reg_adder_out_4_3), .FP_in2 (reg_adder_out_4_4_Delay_Out), .FP_out (adder_out_5_2));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_2_1 (.FP_in1 (reg_adder_out_4_1), .FP_in2 (reg_adder_out_4_2), .FP_out (adder_out_5_1));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_2_2 (.FP_in1 (reg_adder_out_4_3), .FP_in2 (reg_adder_out_4_4_Delay_Out), .FP_out (adder_out_5_2));
     
     Delay #(.Delay_Data_Width(DATA_WIDTH), .delay_cycles(2)) d1 (.clk(clk),.reset(reset), .Data_In(reg_mul_out_25), .Data_Out(adder_out_4_4_Delay_Out));
     
-    FP_Adder adr_1_1 (.FP_in1 (reg_adder_out_5_1), .FP_in2 (reg_adder_out_5_2), .FP_out (adder_out_1_1));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) adr_1_1 (.FP_in1 (reg_adder_out_5_1), .FP_in2 (reg_adder_out_5_2), .FP_out (adder_out_1_1));
     
     assign conv_data_out = reg_adder_out_1_1;  
 

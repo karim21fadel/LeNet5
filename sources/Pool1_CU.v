@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Pool1_CU #(parameter DATA_WIDTH          = 32,
+module Pool1_CU #(parameter  DATA_WIDTH          = 32,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 14,                                                
                              IFM_DEPTH             = 3,

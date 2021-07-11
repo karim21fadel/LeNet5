@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Accumulator_A2 #(parameter DATA_WIDTH      = 32,
+module Accumulator_A2 #(parameter ARITH_TYPE = 1, DATA_WIDTH      = 32,
                              ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 14,                                                
@@ -32,6 +32,6 @@ module Accumulator_A2 #(parameter DATA_WIDTH      = 32,
     
 	assign data_out_mux = accu_enable ? data_in_from_next : data_bias;
 
-    FP_Adder D1 (.FP_in1 (data_in_from_conv), .FP_in2 (data_out_mux), .FP_out (accu_data_out));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) add (.FP_in1 (data_in_from_conv), .FP_in2 (data_out_mux), .FP_out (accu_data_out));
 
 endmodule

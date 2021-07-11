@@ -1,28 +1,7 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 03/25/2021 07:02:56 PM
-// Design Name: 
-// Module Name: Delay_Block
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module Delay
-    #(parameter
-                Delay_Data_Width = 1,
+    #(parameter Delay_Data_Width = 1,
                 delay_cycles = 5
                 )
       (

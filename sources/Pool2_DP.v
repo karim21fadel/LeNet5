@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Pool2_DP #(parameter DATA_WIDTH          = 32,
+module Pool2_DP #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 14,                                                
                              IFM_DEPTH             = 3,
@@ -33,7 +33,7 @@ module Pool2_DP #(parameter DATA_WIDTH          = 32,
 ////////////////////////Signal declaration/////////////////
 		
 
-    Pool2_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH))
+    Pool2_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH))
     unit1(
     .clk(clk),
 	.reset(reset),
@@ -44,7 +44,7 @@ module Pool2_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(data_out_1)
     );
 	
-	Pool2_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH))
+	Pool2_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH))
     unit2(
     .clk(clk),
 	.reset(reset),
@@ -55,7 +55,7 @@ module Pool2_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(data_out_2)
     );
     
-    Pool2_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH))
+    Pool2_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH))
     unit3(
     .clk(clk),
 	.reset(reset),

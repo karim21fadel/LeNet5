@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module ConvA2_DP #(parameter DATA_WIDTH          = 32,
+module ConvA2_DP #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                              ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 32,                                                
@@ -66,20 +66,19 @@ module ConvA2_DP #(parameter DATA_WIDTH          = 32,
 	
 	
 	
-	    
 	wire [ADDRESS_SIZE_WM-1:0] wm_address;
 	wire [$clog2(NUMBER_OF_FILTERS)-1:0] bm_address;
 	
 	assign wm_address = wm_addr_sel ? wm_address_read_current : riscv_address[ADDRESS_SIZE_WM-1:0];
 	assign bm_address = bm_addr_sel ? bm_address_read_current : riscv_address[$clog2(NUMBER_OF_FILTERS)-1:0];
     
-    SinglePort_Memory #(.MEM_SIZE (NUMBER_OF_FILTERS)) bm (.clk(clk),	.Enable_Write(bm_enable_write),
+    SinglePort_Memory #(.DATA_WIDTH(DATA_WIDTH) ,.MEM_SIZE (NUMBER_OF_FILTERS)) bm (.clk(clk),	.Enable_Write(bm_enable_write),
      .Enable_Read(bm_enable_read),	.Address(bm_address),
 	 .Data_Input(riscv_data),	.Data_Output(data_bias));
 	 
   
 
-    ConvA2_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+    ConvA2_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     convA2_unit_1
     (
     .clk(clk),                                 
@@ -95,7 +94,7 @@ module ConvA2_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(unit1_data_out)   
     );
     
-    ConvA2_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+    ConvA2_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     convA2_unit_2
     (
     .clk(clk),                                 
@@ -111,7 +110,7 @@ module ConvA2_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(unit2_data_out)   
     );
     
-    ConvA2_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+    ConvA2_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     convA2_unit_3
     (
     .clk(clk),                                 
@@ -134,10 +133,10 @@ module ConvA2_DP #(parameter DATA_WIDTH          = 32,
 	   sum_conv123 <= sum_conv123_sig;
 	end
 	
-	FP_Adder Adder1 (.FP_in1 (unit1_data_out), .FP_in2 (unit2_data_out), .FP_out (sum_conv12_sig));
-    FP_Adder Adder2 (.FP_in1 (sum_conv12)    , .FP_in2 (unit3_data_out), .FP_out (sum_conv123_sig));
+	Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) Adder1 (.FP_in1 (unit1_data_out), .FP_in2 (unit2_data_out), .FP_out (sum_conv12_sig));
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) Adder2 (.FP_in1 (sum_conv12)    , .FP_in2 (unit3_data_out), .FP_out (sum_conv123_sig));
 	
-	Accumulator_A2 #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+	Accumulator_A2 #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     accu_A2
     (
      .clk(clk),
@@ -148,7 +147,7 @@ module ConvA2_DP #(parameter DATA_WIDTH          = 32,
      .accu_data_out(accu_data_out)
      );
 	
-	Relu  Active1 (.in(accu_data_out),.out (relu_data_out), .relu_enable(relu_enable));
+	Relu #(.DATA_WIDTH(DATA_WIDTH)) Active1 (.in(accu_data_out),.out (relu_data_out), .relu_enable(relu_enable));
 	
     assign data_out_for_next = relu_data_out;
 	   	 

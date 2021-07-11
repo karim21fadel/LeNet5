@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module TOP_ConvB #(parameter DATA_WIDTH          = 32,
+module TOP_ConvB #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                              ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 32,                                                
@@ -98,7 +98,7 @@ module TOP_ConvB #(parameter DATA_WIDTH          = 32,
     );    
      
 
-    ConvB_DP #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS), .NUMBER_OF_UNITS(NUMBER_OF_UNITS))
+    ConvB_DP #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS), .NUMBER_OF_UNITS(NUMBER_OF_UNITS))
     DP_B
     (
     .clk(clk),

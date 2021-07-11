@@ -27,7 +27,8 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     output reg end_to_previous,
     output ready,
     
-    output reg [$clog2(NUMBER_OF_IFM/NUMBER_OF_UNITS+1)-1 : 0] ifm_sel,
+    output reg [$clog2(NUMBER_OF_IFM/NUMBER_OF_UNITS+1)-1 : 0] ifm_sel_previous,
+    output reg                                                 ifm_sel_next,
     output reg ifm_enable_read_current,
     output reg [ADDRESS_SIZE_IFM-1:0] ifm_address_read_current,
 
@@ -150,7 +151,7 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
       
         fifo_enable_sig1               = 1'b0;
         
-        end_to_previous                = 1'b1;// & ~no_more_start_flag;
+        end_to_previous                = 1'b1;
 
 	     if(start)
              state_next = READ;
@@ -179,13 +180,21 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     always @(posedge clk, posedge reset)
     begin
         if(reset)
-            ifm_sel <= 0;
-        else if(ifm_sel == ( (NUMBER_OF_IFM/NUMBER_OF_UNITS +1) -1) & start)
-            ifm_sel <= 0;  
+            ifm_sel_previous <= 0;
+        else if(ifm_sel_previous == ( (NUMBER_OF_IFM/NUMBER_OF_UNITS +1) -1) & start)
+            ifm_sel_previous <= 0;  
         else if(start)
-            ifm_sel <= ifm_sel + 1'b1; 
+            ifm_sel_previous <= ifm_sel_previous + 1'b1; 
     end 
-
+    
+    always @(posedge clk, posedge reset)
+    begin
+        if(reset)
+            ifm_sel_next <= 1'b0;
+        else if(start_to_next)
+            ifm_sel_next <= ~ifm_sel_next;
+    end
+    
     always @(posedge clk, posedge reset)
     begin
         if(reset)
@@ -267,18 +276,6 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     
     assign accu_enable = ( psums_counter_next != 0 );
     assign relu_enable = ( psums_counter_next == (IFM_DEPTH/NUMBER_OF_UNITS +1) -1 );
-    
-    //////////////filters_counter 120
-   /* always @(posedge clk, posedge reset)
-    begin
-        if(reset)
-            no_more_start_flag <= 0;
-        else if (depth_counter == ( (IFM_DEPTH/NUMBER_OF_UNITS +1) -1) & start_from_previous)
-            no_more_start_flag <= 1;       
-        else if (state_reg == IDLE)
-            no_more_start_flag <= 0;   
-        
-    end */
     
     assign no_more_start_flag = |filters_counter;
     assign ready = ~no_more_start_flag;
