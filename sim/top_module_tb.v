@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 
-module top_module_tb #(parameter DATA_WIDTH      = 32,  
+module top_module_tb #(parameter DATA_WIDTH      = 20,
+                                 ARITH_TYPE      = 1,  
                                  ADDRESS_BUS     = 22,  
                                  ADDRESS_BITS    = 15,  
                                  ENABLE_BITS     = 7,   
@@ -54,11 +55,14 @@ module top_module_tb #(parameter DATA_WIDTH      = 32,
     wire [DATA_WIDTH-1:0] Data_out_9_final; 
     wire [DATA_WIDTH-1:0] Data_out_10_final;
     wire ready;
-    wire Get_final_value;                   
+    wire output_ready;                   
 
-
-	// Instantiate the Unit Under Test (UUT)
-	top_module uut (
+    ///////////////////////////////////////////
+	///Instantiate the Unit Under Test (UUT)///
+	///////////////////////////////////////////
+	top_module  #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE))
+        uut
+        (
 		.clk(clk), 
 		.reset(reset), 
 		.riscv_data_bus(riscv_data_bus), 
@@ -75,49 +79,81 @@ module top_module_tb #(parameter DATA_WIDTH      = 32,
         .Data_out_9_final(Data_out_9_final), 
         .Data_out_10_final(Data_out_10_final),
         .ready(ready),
-        .Get_final_value(Get_final_value)                    
+        .output_ready(output_ready)                    
 	);
 	
 	always #5 clk = ~clk;
 
     integer i,j;
-    localparam output_file = "/home/maali/ai_accelerator_block/LeNet5/files/outputs/hard/dec/output_file_dec.txt";
+    localparam output_file = "files/output/hard/dec/output_file_dec.txt";
     integer output_file_id;
     
     
-	initial begin
+	initial 
+	begin
 	
-	output_file_id = $fopen(output_file,"w");
-	
-	if(~output_file_id)
-	       $display("failed1");
+	   output_file_id = $fopen(output_file,"w");
+	   
+	   if(~output_file_id)
+	          $display("failed1");
+       if (ARITH_TYPE )
+       begin
+       $readmemb("extraction/input/image_4979_fixed.txt",input_image2);
+	   $readmemb("extraction/input/image_img_151_fixed.txt",input_image5);
+	   $readmemb("extraction/input/image_5273_fixed.txt",input_image7);
+	    $readmemb("extraction/input/image_4977_fixed.txt",input_image9);
+	   
+	   
+	             
+	   $readmemb("extraction/memory/memory_fixed/layer_1_mem_0.txt",convA1_WM1);
+	             
+	   $readmemb("extraction/memory/memory_fixed/layer_2_mem_0.txt",convB_WM1);
+	   $readmemb("extraction/memory/memory_fixed/layer_2_mem_1.txt",convB_WM2);
+	   $readmemb("extraction/memory/memory_fixed/layer_2_mem_2.txt",convB_WM3);
+	              
+	   $readmemb("extraction/memory/memory_fixed/layer_3_mem_0.txt",convA2_WM1);
+	   $readmemb("extraction/memory/memory_fixed/layer_3_mem_1.txt",convA2_WM2);
+	   $readmemb("extraction/memory/memory_fixed/layer_3_mem_2.txt",convA2_WM3);
+                  
+	   $readmemb("extraction/memory/memory_fixed/layer_4_mem.txt",FC1_WM);
+	   $readmemb("extraction/memory/memory_fixed/layer_5_mem.txt",FC2_WM);
+                  
+	   $readmemb("extraction/memory/memory_fixed/layer_1_mem_bias.txt",convA1_BM);
+	   $readmemb("extraction/memory/memory_fixed/layer_2_mem_bias.txt",convB_BM);
+	   $readmemb("extraction/memory/memory_fixed/layer_3_mem_bias.txt",convA2_BM);
+	   $readmemb("extraction/memory/memory_fixed/layer_4_mem_bias.txt",FC1_BM);
+	   $readmemb("extraction/memory/memory_fixed/layer_5_mem_bias.txt",FC2_BM);
+	   
+	  end
+	  else 
+	   begin 
+	   
+	    $readmemb("extraction/input/image_4979_float.txt",input_image2);
+	   $readmemb("extraction/input/image_img_151_float.txt",input_image5);
+	   $readmemb("extraction/input/image_5273_float.txt",input_image7);
+	    $readmemb("extraction/input/image_4977_float.txt",input_image9);
 
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/inputs/image2_float.txt",input_image2);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/inputs/image5_float.txt",input_image5);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/inputs/image7_float.txt",input_image7);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/inputs/image9_float.txt",input_image9);
-
-	           
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_0_mem.txt",convA1_WM1);
-	           
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_0.txt",convB_WM1);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_1.txt",convB_WM2);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_2.txt",convB_WM3);
-	           
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_0.txt",convA2_WM1);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_1.txt",convA2_WM2);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_2.txt",convA2_WM3);
-               
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_10_mem.txt",FC1_WM);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_12_mem.txt",FC2_WM);
-               
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_0_mem_bias.txt",convA1_BM);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_3_mem_bias.txt",convB_BM);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_6_mem_bias.txt",convA2_BM);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_10_mem_bias.txt",FC1_BM);
-	$readmemb("/home/maali/ai_accelerator_block/LeNet5/files/weights/memory_float/layer_12_mem_bias.txt",FC2_BM);
-	
-	
+	             
+	   $readmemb("extraction/memory/memory_float/layer_1_mem_0.txt",convA1_WM1);
+	             
+	   $readmemb("extraction/memory/memory_float/layer_2_mem_0.txt",convB_WM1);
+	   $readmemb("extraction/memory/memory_float/layer_2_mem_1.txt",convB_WM2);
+	   $readmemb("extraction/memory/memory_float/layer_2_mem_2.txt",convB_WM3);
+	              
+	   $readmemb("extraction/memory/memory_float/layer_3_mem_0.txt",convA2_WM1);
+	   $readmemb("extraction/memory/memory_float/layer_3_mem_1.txt",convA2_WM2);
+	   $readmemb("extraction/memory/memory_float/layer_3_mem_2.txt",convA2_WM3);
+                  
+	   $readmemb("extraction/memory/memory_float/layer_4_mem.txt",FC1_WM);
+	   $readmemb("extraction/memory/memory_float/layer_5_mem.txt",FC2_WM);
+                  
+	   $readmemb("extraction/memory/memory_float/layer_1_mem_bias.txt",convA1_BM);
+	   $readmemb("extraction/memory/memory_float/layer_2_mem_bias.txt",convB_BM);
+	   $readmemb("extraction/memory/memory_float/layer_3_mem_bias.txt",convA2_BM);
+	   $readmemb("extraction/memory/memory_float/layer_4_mem_bias.txt",FC1_BM);
+	   $readmemb("extraction/memory/memory_float/layer_5_mem_bias.txt",FC2_BM);
+	   
+	   end
 	// Initialize Inputs
 	
 	clk = 0;
@@ -313,10 +349,6 @@ module top_module_tb #(parameter DATA_WIDTH      = 32,
         riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
         riscv_address_bus = riscv_address_bus + 22'b00_0000_1000_0000_0000_0000;   
 
-////////////////////////////////////////
-$fwrite(output_file_id, "Random Number %d\n\n" , $random );
-////////////////////////////////////////
-
 
 ////////////////////////////////////////
 //////////////// IFM ///////////////////
@@ -334,14 +366,223 @@ $fwrite(output_file_id, "Random Number %d\n\n" , $random );
     
     @(negedge clk)
     initialization_done = 1'b0;
+
+////////////////////////////////////////
+//////////////// IFM ///////////////////
+////////////////////////////////////////      
+    
+    @(posedge ready)
         
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image5[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
     
+    initialization_done = 1'b1;
     
+    @(negedge clk)
+    initialization_done = 1'b0;      
+    
+     @(posedge ready)
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image7[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;
+
+////////////////////////////////////////
+//////////////// IFM ///////////////////
+////////////////////////////////////////      
+    
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image9[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;      
+      
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image7[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;    
+    
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image5[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;    
+    
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image2[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;    
+    
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image2[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0; 
+       
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image2[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;    
+    
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image2[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;  
+      
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image2[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;  
+      
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image2[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;   
+     
+    @(posedge ready)
+        
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image2[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;    
+    
+////////////////////////////////////////
+//////////////// IFM ///////////////////
+////////////////////////////////////////      
+/*    
+    @(posedge ready)
+         
+    for(j = 0; j < 1024 ; j = j + 1)
+    begin
+        riscv_data_bus    = input_image7[j];
+        @(negedge clk);
+        riscv_address_bus = riscv_address_bus + 1;       
+    end 
+        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
+    
+    initialization_done = 1'b1;
+    
+    @(negedge clk)
+    initialization_done = 1'b0;      
+*/   
+end
+
+
+initial begin  
 ///////////////////////////////////////////////////////////////
 ////////////////// Output File ////////////////////////////////
 ///////////////////////////////////////////////////////////////
+    @(negedge reset)
     
-    @(negedge Get_final_value)
+    @(negedge output_ready)
     
     $fwrite(output_file_id, "%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n\n" , $bitstoshortreal(Data_out_1_final)
                                                                      , $bitstoshortreal(Data_out_2_final)
@@ -355,31 +596,7 @@ $fwrite(output_file_id, "Random Number %d\n\n" , $random );
                                                                      , $bitstoshortreal(Data_out_10_final)
                                                                      );
                                                                      
-    
-    
-	////////////////////////////////////////
-	//////////////// IFM ///////////////////
-	//////////////////////////////////////// 
-
-    for(j = 0; j < 1024 ; j = j + 1)
-    begin
-        riscv_data_bus    = input_image5[j];
-        @(negedge clk);
-        riscv_address_bus = riscv_address_bus + 1;       
-    end 
-        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
-    
-    initialization_done = 1'b1;
-    
-    @(negedge clk)
-    initialization_done = 1'b0;
-                                                                          
-    
-///////////////////////////////////////////////////////////////
-////////////////// Output File ////////////////////////////////
-///////////////////////////////////////////////////////////////
-	
-    @(negedge Get_final_value)
+    @(negedge output_ready)
     
     $fwrite(output_file_id, "%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n\n" , $bitstoshortreal(Data_out_1_final)
                                                                      , $bitstoshortreal(Data_out_2_final)
@@ -391,31 +608,9 @@ $fwrite(output_file_id, "Random Number %d\n\n" , $random );
                                                                      , $bitstoshortreal(Data_out_8_final)
                                                                      , $bitstoshortreal(Data_out_9_final)
                                                                      , $bitstoshortreal(Data_out_10_final)
-                                                                     ); 
-
-	////////////////////////////////////////
-	//////////////// IFM ///////////////////
-	//////////////////////////////////////// 
-
-    for(j = 0; j < 1024 ; j = j + 1)
-    begin
-        riscv_data_bus    = input_image7[j];
-        @(negedge clk);
-        riscv_address_bus = riscv_address_bus + 1;       
-    end 
-        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
-    
-    initialization_done = 1'b1;
-    
-    @(negedge clk)
-    initialization_done = 1'b0;
-                                                                          
-    
-///////////////////////////////////////////////////////////////
-////////////////// Output File ////////////////////////////////
-///////////////////////////////////////////////////////////////
-	
-    @(negedge Get_final_value)
+                                                                     );
+    /*                                                                  	
+    @(negedge output_ready)
     
     $fwrite(output_file_id, "%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n\n" , $bitstoshortreal(Data_out_1_final)
                                                                      , $bitstoshortreal(Data_out_2_final)
@@ -427,47 +622,11 @@ $fwrite(output_file_id, "Random Number %d\n\n" , $random );
                                                                      , $bitstoshortreal(Data_out_8_final)
                                                                      , $bitstoshortreal(Data_out_9_final)
                                                                      , $bitstoshortreal(Data_out_10_final)
-                                                                     );  	
-
-	////////////////////////////////////////
-	//////////////// IFM ///////////////////
-	//////////////////////////////////////// 
-
-    for(j = 0; j < 1024 ; j = j + 1)
-    begin
-        riscv_data_bus    = input_image9[j];
-        @(negedge clk);
-        riscv_address_bus = riscv_address_bus + 1;       
-    end 
-        riscv_address_bus = riscv_address_bus & 22'b11_1111_1000_0000_0000_0000;
-    
-    initialization_done = 1'b1;
-    
-    @(negedge clk)
-    initialization_done = 1'b0;
-                                                                          
-    
-///////////////////////////////////////////////////////////////
-////////////////// Output File ////////////////////////////////
-///////////////////////////////////////////////////////////////
-	
-    @(negedge Get_final_value)
-    
-    $fwrite(output_file_id, "%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n\n" , $bitstoshortreal(Data_out_1_final)
-                                                                     , $bitstoshortreal(Data_out_2_final)
-                                                                     , $bitstoshortreal(Data_out_3_final)
-                                                                     , $bitstoshortreal(Data_out_4_final)
-                                                                     , $bitstoshortreal(Data_out_5_final)
-                                                                     , $bitstoshortreal(Data_out_6_final)
-                                                                     , $bitstoshortreal(Data_out_7_final)
-                                                                     , $bitstoshortreal(Data_out_8_final)
-                                                                     , $bitstoshortreal(Data_out_9_final)
-                                                                     , $bitstoshortreal(Data_out_10_final)
-                                                                     );  																	 
+                                                                     );                                                                    																	 
                                                                      
-
+*/
 $fclose(output_file_id);
-$finish;
+ $finish;
            
 end       
  

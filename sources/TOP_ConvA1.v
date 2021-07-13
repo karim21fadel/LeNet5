@@ -1,13 +1,13 @@
 `timescale 1ns / 1ps
 
-module TOP_ConvA1 #(parameter DATA_WIDTH          = 32,
+module TOP_ConvA1 #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                               ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 32,                                                
                              IFM_DEPTH             = 3,
 							 KERNAL_SIZE           = 5,
 		                     NUMBER_OF_FILTERS     = 6,
-		                     NUMBER_OF_UNITS       = 3,
+		                     NUMBER_OF_UNITS       = 1,
 		                     //////////////////////////////////////
 							 IFM_SIZE_NEXT           = IFM_SIZE - KERNAL_SIZE + 1,
                              ADDRESS_SIZE_IFM        = $clog2(IFM_SIZE*IFM_SIZE),
@@ -61,6 +61,7 @@ module TOP_ConvA1 #(parameter DATA_WIDTH          = 32,
     .reset(reset),
     .end_from_next(end_from_next),
     .start_from_previous(start_from_previous),
+    .ready(ready),
     
     .ifm_enable_read_current(ifm_enable_read_current),
     .ifm_address_read_current(ifm_address_read_current),
@@ -78,12 +79,11 @@ module TOP_ConvA1 #(parameter DATA_WIDTH          = 32,
     .ifm_enable_write_next(ifm_enable_write_next),
     .ifm_address_write_next(ifm_address_write_next),
     .start_to_next(start_to_next),
-    .ifm_sel_next(ifm_sel_next),
-    .ready(ready)
+    .ifm_sel_next(ifm_sel_next)
     );    
      
 
-    ConvA1_DP #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS), .NUMBER_OF_UNITS(NUMBER_OF_UNITS))
+    ConvA1_DP #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS), .NUMBER_OF_UNITS(NUMBER_OF_UNITS))
     DP_A1
     (
     .clk(clk),

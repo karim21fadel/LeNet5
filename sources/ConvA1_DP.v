@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module ConvA1_DP #(parameter DATA_WIDTH          = 32,
+module ConvA1_DP #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 16,
                              ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 32,                                                
@@ -66,7 +66,7 @@ module ConvA1_DP #(parameter DATA_WIDTH          = 32,
 	assign wm_address = wm_addr_sel ? wm_address_read_current : riscv_address[ADDRESS_SIZE_WM-1:0];
 	assign bm_address = bm_addr_sel ? bm_address_read_current : riscv_address[$clog2(NUMBER_OF_FILTERS)-1:0];
     
-    SinglePort_Memory #(.MEM_SIZE (NUMBER_OF_FILTERS)) bm (.clk(clk),	.Enable_Write(bm_enable_write),
+    SinglePort_Memory #(.DATA_WIDTH(DATA_WIDTH), .MEM_SIZE (NUMBER_OF_FILTERS)) bm (.clk(clk),	.Enable_Write(bm_enable_write),
      .Enable_Read(bm_enable_read),	.Address(bm_address),
 	 .Data_Input(riscv_data),	.Data_Output(data_bias));
 	 
@@ -80,7 +80,7 @@ module ConvA1_DP #(parameter DATA_WIDTH          = 32,
     .Enable_Write_A(ifm_enable_write_previous[0]),
     .Enable_Read_A(1'b0), 
   
-    .Data_Input_B(32'b0),
+    .Data_Input_B({DATA_WIDTH{1'b0}}),
     .Address_B(ifm_address_read_current),
     .Enable_Write_B(1'b0),
     .Enable_Read_B(ifm_enable_read_current), 
@@ -126,7 +126,7 @@ module ConvA1_DP #(parameter DATA_WIDTH          = 32,
 	);
 */	
 	 
-    ConvA1_unit 
+    ConvA1_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE))
     convA1_unit_1
     (
     .clk(clk),                                 
@@ -142,7 +142,7 @@ module ConvA1_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(unit1_data_out)   
     );
     
-/*    ConvA1_unit 
+/*    ConvA1_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) 
     convA1_unit_2
     (
     .clk(clk),                                 
@@ -158,7 +158,7 @@ module ConvA1_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(unit2_data_out)   
     );
     
-    ConvA1_unit 
+    ConvA1_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE))
     convA1_unit_3
     (
     .clk(clk),                                 
@@ -183,10 +183,8 @@ module ConvA1_DP #(parameter DATA_WIDTH          = 32,
 	   full_sum     <= full_sum_reg;
 	end
 	
-   FP_Adder Adder (.FP_in1 (partial_sum1), .FP_in2 (partial_sum2), .FP_out (full_sum_reg));
+   Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) add1 (.FP_in1 (partial_sum1), .FP_in2 (partial_sum2), .FP_out (full_sum_reg));
    
-   Relu  Active1 (.in(full_sum),.out (data_out_for_next), .relu_enable(1'b1)); 
-	 
-    
+   Relu  #(.DATA_WIDTH(DATA_WIDTH))  Active1 (.in(full_sum),.out (data_out_for_next), .relu_enable(1'b1)); 
 	
 endmodule

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module  TOP_Pool1 #(parameter DATA_WIDTH          = 32,
+module  TOP_Pool1 #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 28,                                                
                              IFM_DEPTH             = 3,
@@ -56,7 +56,7 @@ module  TOP_Pool1 #(parameter DATA_WIDTH          = 32,
     .ifm_sel_next (ifm_sel_next)
    );
    
-    Pool1_DP #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE)) 
+    Pool1_DP #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE)) 
     DP
 	(
 	.clk(clk),

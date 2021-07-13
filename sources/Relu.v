@@ -1,12 +1,12 @@
 `timescale 1ns / 1ps
 
-module Relu #(parameter Data_Width = 32)
+module Relu #(parameter DATA_WIDTH = 32)
     (
     input relu_enable,
-    input [Data_Width-1:0] in,
-    output [Data_Width-1:0] out
+    input [DATA_WIDTH-1:0] in,
+    output [DATA_WIDTH-1:0] out
     );
    
-   assign out = ( (in[Data_Width-1]) & relu_enable ) ?  32'h00000000 : in ;
-    //assign out = in;
+   assign out = ( (in[DATA_WIDTH-1]) & relu_enable ) ?  {DATA_WIDTH{1'b0}} : in ;
+    
 endmodule 

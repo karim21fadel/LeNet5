@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module ConvB_DP #(parameter DATA_WIDTH          = 32,
+module ConvB_DP #(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                              ADDRESS_BITS        = 15,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 32,                                                
@@ -96,15 +96,15 @@ module ConvB_DP #(parameter DATA_WIDTH          = 32,
 	assign wm_address = wm_addr_sel ? wm_address_read_current : riscv_address[ADDRESS_SIZE_WM-1:0];
 	assign bm_address = bm_addr_sel ? bm_address_read_current : riscv_address[$clog2((NUMBER_OF_FILTERS/NUMBER_OF_UNITS)+1)-1:0];
     
-    SinglePort_Memory #(.MEM_SIZE ((NUMBER_OF_FILTERS/NUMBER_OF_UNITS)+1)) bm1 (.clk(clk),	.Enable_Write(bm_enable_write[0]),
+    SinglePort_Memory #(.DATA_WIDTH(DATA_WIDTH), .MEM_SIZE ((NUMBER_OF_FILTERS/NUMBER_OF_UNITS)+1)) bm1 (.clk(clk),	.Enable_Write(bm_enable_write[0]),
      .Enable_Read(bm_enable_read),	.Address(bm_address),
 	 .Data_Input(riscv_data),	.Data_Output(data_bias_1));
    
-   SinglePort_Memory #(.MEM_SIZE ((NUMBER_OF_FILTERS/NUMBER_OF_UNITS)+1)) bm2 (.clk(clk),	.Enable_Write(bm_enable_write[1]),
+    SinglePort_Memory #(.DATA_WIDTH(DATA_WIDTH), .MEM_SIZE ((NUMBER_OF_FILTERS/NUMBER_OF_UNITS)+1)) bm2 (.clk(clk),	.Enable_Write(bm_enable_write[1]),
      .Enable_Read(bm_enable_read),	.Address(bm_address),
 	 .Data_Input(riscv_data),	.Data_Output(data_bias_2));
 	 
-  SinglePort_Memory #(.MEM_SIZE ((NUMBER_OF_FILTERS/NUMBER_OF_UNITS)+1)) bm3 (.clk(clk),	.Enable_Write(bm_enable_write[2]),
+    SinglePort_Memory #(.DATA_WIDTH(DATA_WIDTH), .MEM_SIZE ((NUMBER_OF_FILTERS/NUMBER_OF_UNITS)+1)) bm3 (.clk(clk),	.Enable_Write(bm_enable_write[2]),
      .Enable_Read(bm_enable_read),	.Address(bm_address),
 	 .Data_Input(riscv_data),	.Data_Output(data_bias_3));
 	 
@@ -144,7 +144,7 @@ module ConvB_DP #(parameter DATA_WIDTH          = 32,
 	);
 	
     
-    ConvB_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+    ConvB_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     convB_unit_1
     (
     .clk(clk),                                 
@@ -187,7 +187,7 @@ module ConvB_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(unit1_data_out)   
     );
     
-    ConvB_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+    ConvB_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     convB_unit_2
     (
     .clk(clk),                                 
@@ -230,7 +230,7 @@ module ConvB_DP #(parameter DATA_WIDTH          = 32,
     .unit_data_out(unit2_data_out)   
     );
     
-    ConvB_unit #(.DATA_WIDTH(DATA_WIDTH), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
+    ConvB_unit #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE), .IFM_SIZE(IFM_SIZE), .IFM_DEPTH(IFM_DEPTH), .KERNAL_SIZE(KERNAL_SIZE), .NUMBER_OF_FILTERS(NUMBER_OF_FILTERS))
     convB_unit_3
     (
     .clk(clk),                                 

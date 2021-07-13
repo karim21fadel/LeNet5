@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Average_Pooling#(parameter DATA_WIDTH          = 32,
+module Average_Pooling#(parameter ARITH_TYPE = 1, DATA_WIDTH          = 32,
                              /////////////////////////////////////
 	                         IFM_SIZE              = 14,                                                
                              IFM_DEPTH             = 3,
@@ -27,17 +27,17 @@ module Average_Pooling#(parameter DATA_WIDTH          = 32,
     reg  [DATA_WIDTH-1:0] sum_11_reg, sum_12_reg, sum_21_reg;
     wire [DATA_WIDTH-1:0] avgIFM;
     
-    FP_Adder add1( .FP_in1(pool_data_in_1), .FP_in2(pool_data_in_2), .FP_out(sum_11) );
-    FP_Adder add2( .FP_in1(pool_data_in_3), .FP_in2(pool_data_in_4), .FP_out(sum_12) );
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) add1( .FP_in1(pool_data_in_1), .FP_in2(pool_data_in_2), .FP_out(sum_11) );
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) add2( .FP_in1(pool_data_in_3), .FP_in2(pool_data_in_4), .FP_out(sum_12) );
 
-    FP_Adder add3( .FP_in1(sum_11_reg), .FP_in2(sum_12_reg), .FP_out(sum_21) ); 
+    Adder #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) add3( .FP_in1(sum_11_reg), .FP_in2(sum_12_reg), .FP_out(sum_21) ); 
     
     always @(posedge clk or posedge reset)
     begin
         if(reset)
             begin
-            sum_11_reg <= 0;
-            sum_12_reg <= 0;      
+            sum_11_reg <= {DATA_WIDTH{1'b0}};
+            sum_12_reg <= {DATA_WIDTH{1'b0}};      
             end
         else if (pool_enable)
             begin
@@ -49,23 +49,19 @@ module Average_Pooling#(parameter DATA_WIDTH          = 32,
     always @(posedge clk or posedge reset)
     begin
         if(reset)
-            sum_21_reg <= 0;        
+            sum_21_reg <= {DATA_WIDTH{1'b0}};        
         else 
             sum_21_reg <= sum_21;
     end 
 
-    //FP_Divider div1 ( .FP_in1(sum_21_reg), .FP_in2(32'd4), .FP_out(avgIFM) );
-
-    FP_Divider div1 ( .FP_in1(sum_21_reg), .FP_in2(32'b01000000100000000000000000000000), .FP_out(avgIFM) );
+    Divider #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) div1 ( .FP_in1(sum_21_reg), .FP_out(avgIFM) );
 
     always @(posedge clk or posedge reset)
     begin
         if(reset)
-            pool_data_out_reg <= 0;
+            pool_data_out_reg <= {DATA_WIDTH{1'b0}};
         else
             pool_data_out_reg <= avgIFM;
     end
     
-   
-
 endmodule

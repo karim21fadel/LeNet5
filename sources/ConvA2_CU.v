@@ -27,7 +27,8 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     output reg end_to_previous,
     output ready,
     
-    output reg [$clog2(NUMBER_OF_IFM/NUMBER_OF_UNITS+1)-1 : 0] ifm_sel,
+    output reg [$clog2(NUMBER_OF_IFM/NUMBER_OF_UNITS+1)-1 : 0] ifm_sel_previous,
+    output reg                                                 ifm_sel_next,
     output reg ifm_enable_read_current,
     output reg [ADDRESS_SIZE_IFM-1:0] ifm_address_read_current,
 
@@ -46,8 +47,8 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     output relu_enable,
     output ifm_enable_read_next,
     output ifm_enable_write_next,
-    //output reg  [ADDRESS_SIZE_NEXT_IFM-1:0] ifm_address_read_next,
-    //output wire [ADDRESS_SIZE_NEXT_IFM-1:0] ifm_address_write_next,
+    output reg  [ADDRESS_SIZE_NEXT_IFM-1:0] ifm_address_read_next,
+    output wire [ADDRESS_SIZE_NEXT_IFM-1:0] ifm_address_write_next,
     output reg start_to_next
     );
     
@@ -64,7 +65,7 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     reg  [$clog2( (IFM_DEPTH/NUMBER_OF_UNITS)+1 )-1 : 0] depth_counter;
     wire depth_counter_tick;
     
-    reg  [$clog2(NUMBER_OF_FILTERS)-1 : 0] psums_counter_next;
+    reg  [$clog2( (IFM_DEPTH/NUMBER_OF_UNITS+1 ))-1 : 0] psums_counter_next;
     wire psums_counter_next_tick;
     
     wire start_internal;
@@ -150,7 +151,7 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
       
         fifo_enable_sig1               = 1'b0;
         
-        end_to_previous                = 1'b1;// & ~no_more_start_flag;
+        end_to_previous                = 1'b1;
 
 	     if(start)
              state_next = READ;
@@ -179,13 +180,21 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     always @(posedge clk, posedge reset)
     begin
         if(reset)
-            ifm_sel <= 0;
-        else if(ifm_sel == ( (NUMBER_OF_IFM/NUMBER_OF_UNITS +1) -1) & start)
-            ifm_sel <= 0;  
+            ifm_sel_previous <= 0;
+        else if(ifm_sel_previous == ( (NUMBER_OF_IFM/NUMBER_OF_UNITS +1) -1) & start)
+            ifm_sel_previous <= 0;  
         else if(start)
-            ifm_sel <= ifm_sel + 1'b1; 
+            ifm_sel_previous <= ifm_sel_previous + 1'b1; 
     end 
-
+    
+    always @(posedge clk, posedge reset)
+    begin
+        if(reset)
+            ifm_sel_next <= 1'b0;
+        else if(start_to_next)
+            ifm_sel_next <= ~ifm_sel_next;
+    end
+    
     always @(posedge clk, posedge reset)
     begin
         if(reset)
@@ -267,18 +276,6 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     
     assign accu_enable = ( psums_counter_next != 0 );
     assign relu_enable = ( psums_counter_next == (IFM_DEPTH/NUMBER_OF_UNITS +1) -1 );
-    
-    //////////////filters_counter 120
-   /* always @(posedge clk, posedge reset)
-    begin
-        if(reset)
-            no_more_start_flag <= 0;
-        else if (depth_counter == ( (IFM_DEPTH/NUMBER_OF_UNITS +1) -1) & start_from_previous)
-            no_more_start_flag <= 1;       
-        else if (state_reg == IDLE)
-            no_more_start_flag <= 0;   
-        
-    end */
     
     assign no_more_start_flag = |filters_counter;
     assign ready = ~no_more_start_flag;
@@ -416,7 +413,7 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     
     reg Enable1_reg,Enable2_reg,Enable3_reg,Enable4_reg,Enable5_reg,Enable6_reg,Enable7_reg,Enable8_reg,Enable9_reg;
     
- /*   always @(posedge clk, posedge reset)
+    always @(posedge clk, posedge reset)
     begin
         if(reset)
             ifm_address_read_next <= {ADDRESS_SIZE_NEXT_IFM{1'b0}}; 
@@ -428,7 +425,7 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     
     assign ifm_address_write_next = ifm_address_read_next - 1;
     assign address_write_next_tick = (ifm_address_write_next == IFM_SIZE_NEXT*IFM_SIZE_NEXT-1);
-   */     
+       
     always @(posedge clk )
     begin
         Enable1_reg <= conv_enable;
@@ -448,12 +445,8 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
     ////// start to next /////
     //////////////////////////
     
-    always @(posedge clk)
-    begin
-        start_to_next <= psums_counter_next_tick;
-    end
-  /*   localparam  s0   = 1'b0,
-                 s1   = 2'b1;	  
+    localparam  s0   = 1'b0,
+                s1   = 2'b1;	  
 							  
     reg state_reg2, state_next2; 
     
@@ -474,7 +467,7 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
         s0 : 
         begin
             start_to_next = 1'b0;
-            if(address_write_next_tick)
+            if(psums_counter_next_tick)
                 state_next2 = s1;          
         end
         
@@ -496,5 +489,5 @@ module ConvA2_CU #(parameter DATA_WIDTH          = 32,
         
         endcase
     end
-    */
+    
 endmodule

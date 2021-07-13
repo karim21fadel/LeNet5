@@ -55,7 +55,6 @@ module ConvA1_CU #(parameter DATA_WIDTH          = 32,
     wire filters_counter_tick;
     reg start_internal;
     wire start;
-    wire no_more_start_flag;
     
     reg mem_empty; 
     wire signal_hold;
