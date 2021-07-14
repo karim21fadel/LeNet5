@@ -147,7 +147,29 @@ module  FC2_DP  #(parameter ARITH_TYPE = 1, DATA_WIDTH      = 32,
 	wire [DATA_WIDTH - 1 : 0] s_Data_out_FC_8  ;
 	wire [DATA_WIDTH - 1 : 0] s_Data_out_FC_9  ;
 	wire [DATA_WIDTH - 1 : 0] s_Data_out_FC_10 ;
-
+	
+	wire [DATA_WIDTH-1:0] Data_Weight_1;
+    wire [DATA_WIDTH-1:0] Data_Weight_2;
+    wire [DATA_WIDTH-1:0] Data_Weight_3;
+    wire [DATA_WIDTH-1:0] Data_Weight_4;
+    wire [DATA_WIDTH-1:0] Data_Weight_5;
+    wire [DATA_WIDTH-1:0] Data_Weight_6;
+    wire [DATA_WIDTH-1:0] Data_Weight_7;
+    wire [DATA_WIDTH-1:0] Data_Weight_8;
+    wire [DATA_WIDTH-1:0] Data_Weight_9;
+    wire [DATA_WIDTH-1:0] Data_Weight_10;
+    
+    wire [DATA_WIDTH-1:0] data_bias_fc2_1;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_2;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_3;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_4;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_5;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_6;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_7;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_8;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_9;
+    wire [DATA_WIDTH-1:0] data_bias_fc2_10;
+	
     reg  [DATA_WIDTH - 1 : 0] Data_Read_mux;
 	
 	wire [ADDRESS_SIZE_WM-1:0] wm_address;
@@ -270,31 +292,7 @@ module  FC2_DP  #(parameter ARITH_TYPE = 1, DATA_WIDTH      = 32,
 	   ); 
  
 
-    wire [DATA_WIDTH-1:0] Data_Weight_1;
-    wire [DATA_WIDTH-1:0] Data_Weight_2;
-    wire [DATA_WIDTH-1:0] Data_Weight_3;
-    wire [DATA_WIDTH-1:0] Data_Weight_4;
-    wire [DATA_WIDTH-1:0] Data_Weight_5;
-    wire [DATA_WIDTH-1:0] Data_Weight_6;
-    wire [DATA_WIDTH-1:0] Data_Weight_7;
-    wire [DATA_WIDTH-1:0] Data_Weight_8;
-    wire [DATA_WIDTH-1:0] Data_Weight_9;
-    wire [DATA_WIDTH-1:0] Data_Weight_10;
-    
-    wire [DATA_WIDTH-1:0] data_bias_fc2_1;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_2;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_3;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_4;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_5;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_6;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_7;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_8;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_9;
-    wire [DATA_WIDTH-1:0] data_bias_fc2_10;
-
-
-
-
+   
 	Fully_Connected_2  #(.DATA_WIDTH(DATA_WIDTH), .ARITH_TYPE(ARITH_TYPE)) F2 (.Data_in(Data_for_FC),.Data_Weight_1(Data_Weight_1) ,.Data_Weight_2(Data_Weight_2) ,.Data_Weight_3(Data_Weight_3) ,.Data_Weight_4(Data_Weight_4) ,.Data_Weight_5(Data_Weight_5) ,.Data_Weight_6(Data_Weight_6) ,.Data_Weight_7(Data_Weight_7) ,.Data_Weight_8(Data_Weight_8) ,.Data_Weight_9(Data_Weight_9) ,.Data_Weight_10(Data_Weight_10) ,.Data_out_FC_1(s_Data_out_FC_1) ,.Data_out_FC_2(s_Data_out_FC_2) ,.Data_out_FC_3(s_Data_out_FC_3) ,.Data_out_FC_4(s_Data_out_FC_4) ,.Data_out_FC_5(s_Data_out_FC_5) ,.Data_out_FC_6(s_Data_out_FC_6) ,.Data_out_FC_7(s_Data_out_FC_7) ,.Data_out_FC_8(s_Data_out_FC_8) ,.Data_out_FC_9(s_Data_out_FC_9) ,.Data_out_FC_10(s_Data_out_FC_10));
 
 	FIFO_10outputs_FC2  #(.DATA_WIDTH(DATA_WIDTH)) 
